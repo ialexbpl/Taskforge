@@ -45,4 +45,29 @@ public class AuthController : ControllerBase
         return Ok(new { user.Id, user.Email, user.DisplayName });
     }
 
+    [HttpPost("login")]
+    public async Task<ActionResult<TokenDto>> Login(LoginDto dto)
+    {
+        var email = dto.Email.Trim().ToLower();
+        var user = await _db.Users.FirstOrDefaultAsync(x => x.Email == email);
+        if (user is null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            return Unauthorized();
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]!));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            claims: new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role)
+            },
+            expires: DateTime.UtcNow.AddHours(8),
+            signingCredentials: creds);
+
+        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+        return Ok(new TokenDto(jwt));
+    }
+
 }
