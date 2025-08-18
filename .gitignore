@@ -363,4 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # .gitignore
-appsettings.Local.json
+appsettings.Development.json
+/Backend/src/TaskForge.Api/appsettings.Development.json
