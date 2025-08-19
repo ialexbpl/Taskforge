@@ -2,11 +2,21 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
+ selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  template: `
+    <nav class="navbar navbar-expand navbar-light bg-light px-3">
+      <a class="navbar-brand" routerLink="/">TaskForge</a>
+      <div class="navbar-nav">
+        <a class="nav-link" routerLink="/projects">Projects</a>
+        <a class="nav-link" routerLink="/auth">Auth</a>
+      </div>
+      <div class="ms-auto">
+        <button class="btn btn-sm btn-outline-secondary" (click)="logout()">Logout</button>
+      </div>
+    </nav>
+    <router-outlet></router-outlet>`
 })
 export class AppComponent {
-  title = 'taskforge-app';
-}
+ logout(){ localStorage.removeItem('access_token'); }
