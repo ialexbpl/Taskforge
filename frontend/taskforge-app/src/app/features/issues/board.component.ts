@@ -37,4 +37,8 @@ export class BoardComponent {
   move(i: Issue, status: string){
     this.issuesApi.setStatus(i.id, status).subscribe(u=> i.status = u.status);
 }
+  list(col: string): Issue[] {
+    return this.issues.filter(i => i.status === col);
+  }
+    trackById(_idx: number, item: Issue) { return item.id; }
 }
