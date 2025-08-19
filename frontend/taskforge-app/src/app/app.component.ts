@@ -20,3 +20,5 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
  logout(){ localStorage.removeItem('access_token'); }
+}
+
