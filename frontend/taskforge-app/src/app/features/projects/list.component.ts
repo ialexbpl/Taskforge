@@ -11,7 +11,7 @@ import { ProjectsService } from '../../core/api/projects.service';
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class ListComponent {
+export class ProjectListComponent {
 projects:any[]=[]; name=''; key='';
   constructor(private projectsApi: ProjectsService, private router: Router) {}
   ngOnInit(){ this.projectsApi.list().subscribe(x=>this.projects=x); }
