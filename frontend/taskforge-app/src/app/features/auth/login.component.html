@@ -1,1 +1,15 @@
-<p>login works!</p>
+<div class="container mt-4" style="max-width:520px">
+  <h2>Sign in</h2>
+  <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+  <input class="form-control mb-2" placeholder="Email" [(ngModel)]="email">
+  <input class="form-control mb-3" placeholder="Password" type="password" [(ngModel)]="password">
+  <button class="btn btn-primary" (click)="login()" [disabled]="busy">Sign in</button>
+
+
+ <hr class="my-4">
+  <h3>Quick register</h3>
+  <input class="form-control mb-2" placeholder="Display name" [(ngModel)]="name">
+  <input class="form-control mb-2" placeholder="Email" [(ngModel)]="regEmail">
+  <input class="form-control mb-3" placeholder="Password" type="password" [(ngModel)]="regPass">
+  <button class="btn btn-outline-secondary" (click)="register()">Create account</button>
+</div>
