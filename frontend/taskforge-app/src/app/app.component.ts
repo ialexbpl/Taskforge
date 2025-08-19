@@ -1,24 +1,32 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
  selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  // added RouterLink & RouterLinkActive so links work in a standalone component
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
     <nav class="navbar navbar-expand navbar-light bg-light px-3">
       <a class="navbar-brand" routerLink="/">TaskForge</a>
+
       <div class="navbar-nav">
-        <a class="nav-link" routerLink="/projects">Projects</a>
-        <a class="nav-link" routerLink="/auth">Auth</a>
+        <a class="nav-link" routerLink="/projects" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Projects</a>
+        <a class="nav-link" routerLink="/auth" routerLinkActive="active">Auth</a>
       </div>
+
       <div class="ms-auto">
         <button class="btn btn-sm btn-outline-secondary" (click)="logout()">Logout</button>
       </div>
     </nav>
-    <router-outlet></router-outlet>`
+
+    <router-outlet></router-outlet>
+  `
 })
 export class AppComponent {
- logout(){ localStorage.removeItem('access_token'); }
+   constructor(private router: Router) {}
+  logout() {
+    localStorage.removeItem('access_token');
+    this.router.navigateByUrl('/auth');
 }
-
+}
