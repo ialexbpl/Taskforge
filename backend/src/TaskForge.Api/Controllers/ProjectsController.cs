@@ -22,9 +22,15 @@ public class ProjectsController : ControllerBase
         _db.Projects.OrderBy(p => p.CreatedAt).ToListAsync();
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateProjectDto dto)
+    public async Task<IActionResult> Create([FromBody] CreateProjectDto dto)
     {
-        var key = dto.Key.Trim().ToUpper();
+        var name = (dto.Name ?? "").Trim();
+        var key = (dto.Key ?? "").Trim().ToUpperInvariant();
+
+        if (name.Length is < 2 or > 200) return BadRequest("Name must be 2–200 chars.");
+        if (key.Length is < 2 or > 20 || !key.All(ch => char.IsLetterOrDigit(ch) || ch == '-'))
+            return BadRequest("Key must be 2–20 chars (A–Z, 0–9, '-').");
+
         if (await _db.Projects.AnyAsync(p => p.Key == key))
             return Conflict("Key already exists");
 
@@ -33,10 +39,11 @@ public class ProjectsController : ControllerBase
         if (string.IsNullOrWhiteSpace(userIdStr)) return Unauthorized();
 
         var ownerId = Guid.Parse(userIdStr);
-        var p = new Project { Name = dto.Name.Trim(), Key = key, OwnerId = ownerId };
 
+        var p = new Project { Name = name, Key = key, OwnerId = ownerId };
         _db.Projects.Add(p);
         await _db.SaveChangesAsync();
+
         return Ok(p);
     }
 
