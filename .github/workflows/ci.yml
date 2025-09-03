@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend/TaskForge.Api
+        working-directory: backend/src/TaskForge.Api
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
