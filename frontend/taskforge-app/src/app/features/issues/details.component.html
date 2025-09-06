@@ -1,0 +1,61 @@
+<div class="container mt-4" *ngIf="issue">
+  <a routerLink="/projects" class="btn btn-sm btn-link">&larr; Back to projects</a>
+  <h3 class="mb-3">{{ issue.title }}</h3>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input class="form-control" [(ngModel)]="issue.title">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" rows="6" [(ngModel)]="issue.description"></textarea>
+      </div>
+      <div class="d-flex gap-3 mb-3">
+        <div>
+          <label class="form-label">Status</label>
+          <select class="form-select" [(ngModel)]="issue.status">
+            <option *ngFor="let s of statusList" [value]="s">{{s}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Priority</label>
+          <select class="form-select" [(ngModel)]="issue.priority">
+            <option *ngFor="let p of priorityList" [value]="p">{{p}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Type</label>
+          <select class="form-select" [(ngModel)]="issue.type">
+            <option *ngFor="let t of typeList" [value]="t">{{t}}</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" (click)="save()" [disabled]="saving">Save</button>
+
+      <div class="mt-3 text-muted">
+        <small>Created: {{ issue.createdAt | date:'medium' }}
+          <span *ngIf="issue.updatedAt"> • Updated: {{ issue.updatedAt | date:'medium' }}</span>
+        </small>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <h5>Comments</h5>
+      <div class="mb-2">
+        <input #cmt class="form-control" placeholder="Add a comment and press Enter"
+               (keyup.enter)="addComment(cmt.value); cmt.value='';">
+      </div>
+      <div class="list-group">
+        <div class="list-group-item" *ngFor="let c of comments">
+          <div class="small text-muted">{{ c.createdAt | date:'short' }}</div>
+          <div>{{ c.body }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+</div>
