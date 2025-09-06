@@ -87,3 +87,14 @@ public DateTime? RevokedAt { get; set; }
 // nav
 public User? User { get; set; }
 }
+public class Comment
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    [Required] public Guid IssueId { get; set; }
+    [Required] public Guid AuthorId { get; set; }
+    [Required, MaxLength(4000)] public string Body { get; set; } = "";
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public Issue? Issue { get; set; }
+    public User? Author { get; set; }
+}

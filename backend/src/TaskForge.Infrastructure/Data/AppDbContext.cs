@@ -12,7 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<Issue> Issues => Set<Issue>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
-
+    public DbSet<Comment> Comments => Set<Comment>();
     protected override void OnModelCreating(ModelBuilder b)
     {
         base.OnModelCreating(b);
@@ -54,6 +54,20 @@ public class AppDbContext : DbContext
              .WithMany(u => u.RefreshTokens)
              .HasForeignKey(t => t.UserId)
              .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // COMMENTS and existing mappings
+        b.Entity<Comment>(e =>
+        {
+            e.HasOne(c => c.Issue)
+             .WithMany()
+             .HasForeignKey(c => c.IssueId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasOne(c => c.Author)
+             .WithMany()
+             .HasForeignKey(c => c.AuthorId)
+             .OnDelete(DeleteBehavior.Restrict);
         });
     }
 
